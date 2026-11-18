@@ -1,0 +1,361 @@
+@charset "UTF-8";
+
+/* =========================================================
+   Show Your Mood - 모바일 퍼스트 반응형 예제
+
+   [작업 순서]
+   STEP 0. 초기화(Reset)
+   STEP 1. 디자인 토큰 (변수)
+   STEP 2. 모바일 기본 스타일 (375px 시안 기준) ← 미디어쿼리 없이 작성
+   STEP 3. PC 확장 (@media min-width: 1024px) ← 바뀌는 것만 덮어쓰기
+
+   [단위 원칙]
+   - 컴포넌트 내부 여백 → space 토큰 (--space-*)
+   - 레이아웃 여백     → clamp() + vw (화면 너비에 따라 부드럽게 변함)
+   - 폰트 크기         → rem (1rem = 16px)
+   ========================================================= */
+
+
+/* ---------------------------------------------------------
+   STEP 0. 초기화
+   --------------------------------------------------------- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+ul { list-style: none; }
+a { color: inherit; text-decoration: none; }
+button, input { font: inherit; border: 0; background: none; }
+button { cursor: pointer; }
+
+/* 이미지가 부모보다 커져서 가로 스크롤이 생기지 않도록 */
+img {
+  display: block;
+  max-width: 100%;
+}
+
+/* 화면에는 숨기고 스크린리더에는 읽히게 하는 클래스 */
+.blind {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+
+/* ---------------------------------------------------------
+   STEP 1. 디자인 토큰
+   --------------------------------------------------------- */
+:root {
+  /* 컬러 */
+  --color-black: #222;
+  --color-gray-100: #d9d9d9;
+  --color-gray-400: #aaa;
+  --color-gray-500: #999;
+  --color-green-100: #cfdccb;
+  --color-white: #fff;
+
+  /* space 토큰 : 컴포넌트 내부 여백 (피그마 space 변수와 동일) */
+  --space-8: 8px;
+  --space-12: 12px;
+  --space-16: 16px;
+  --space-20: 20px;
+  --space-24: 24px;
+  --space-28: 28px;
+  --space-56: 56px;
+  --space-80: 80px;
+
+  /* 레이아웃 여백 : clamp(최소값, 선호값, 최대값)
+     모바일 375px → PC 1920px 사이에서 값이 비율대로 늘어납니다.
+     선호값 공식 = 기울기(vw) + 보정값(px)
+       기울기 = (최대 - 최소) / (1920 - 375) × 100
+       보정값 = 최소 - 기울기 × 3.75                          */
+  --layout-gutter:   clamp(16px, 10.74vw - 24.29px, 182px); /* 좌우 여백 16 → 182 */
+  --layout-top:      clamp(27px, 1.88vw + 19.96px, 56px);   /* 헤더 ~ 본문 27 → 56 */
+  --layout-bottom:   clamp(60px, 1.29vw + 55.15px, 80px);   /* 페이지 하단 60 → 80 */
+  --layout-hero:     clamp(20px, 1.29vw + 15.15px, 40px);   /* 타이틀 ~ 검색 20 → 40 */
+  --layout-content:  clamp(28px, 1.81vw + 21.2px, 56px);    /* 검색 ~ 섹션 28 → 56 */
+  --layout-section:  clamp(28px, 0.78vw + 25.09px, 40px);   /* 섹션 ~ 섹션 28 → 40 */
+}
+
+
+/* ---------------------------------------------------------
+   STEP 2. 모바일 기본 스타일 (375px 시안)
+   --------------------------------------------------------- */
+body {
+  font-family: "Pretendard", -apple-system, BlinkMacSystemFont, sans-serif;
+  color: var(--color-black);
+  background: var(--color-white);
+}
+
+/* 모바일 퍼스트: PC 전용 요소는 기본으로 숨김 */
+.pc-only { display: none; }
+
+/* 공통 컨테이너: 좌우 여백 + 최대 너비 */
+.container {
+  width: 100%;
+  max-width: 1920px;
+  margin-inline: auto;
+  padding-inline: var(--layout-gutter);
+}
+
+/* ----- 헤더 ----- */
+.header {
+  border-bottom: 1px solid var(--color-black);
+  background: var(--color-white);
+}
+
+.header__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-block: var(--space-8);
+}
+
+.logo {
+  display: block;
+  width: 32px;
+  height: 32px;
+  background: var(--color-black);
+}
+
+.btn-menu {
+  width: 24px;
+  height: 24px;
+  background: var(--color-black);
+}
+
+/* ----- 본문 ----- */
+.main {
+  display: flex;
+  flex-direction: column;
+  gap: var(--layout-hero);
+  padding-top: var(--layout-top);
+  padding-bottom: var(--layout-bottom);
+}
+
+/* 타이틀 */
+.hero {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--space-8);
+}
+
+.hero__title {
+  font-size: 2rem;          /* 32px */
+  font-weight: 700;
+  line-height: 1.5;
+  text-transform: uppercase;
+}
+
+.hero__dot {
+  width: 8px;
+  height: 8px;
+  margin-bottom: var(--space-16);
+  background: var(--color-black);
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--layout-content);
+}
+
+/* 검색 */
+.search {
+  display: flex;
+  width: 100%;
+  height: 48px;
+}
+
+.search__input {
+  flex: 1;
+  min-width: 0;             /* flex 안의 input이 넘치지 않도록 */
+  padding-inline: var(--space-20);
+  border: 1px solid var(--color-black);
+  background: var(--color-green-100);
+  font-size: 1rem;          /* 16px */
+  font-weight: 500;
+  color: var(--color-black);
+}
+
+.search__input::placeholder {
+  color: var(--color-gray-500);
+}
+
+.search__btn {
+  padding-inline: var(--space-12);
+  background: var(--color-black);
+  font-size: 1rem;          /* 16px */
+  font-weight: 500;
+  color: var(--color-gray-400);
+}
+
+/* 섹션 */
+.sections {
+  display: flex;
+  flex-direction: column;
+  gap: var(--layout-section);
+}
+
+.section__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-8);
+}
+
+.section__title {
+  font-size: 1.25rem;       /* 20px */
+  font-weight: 600;
+  line-height: 1.5;
+  text-transform: uppercase;
+}
+
+.section__more img {
+  width: 24px;
+  height: 24px;
+}
+
+/* 그리드 : 모바일은 2열 */
+.grid {
+  display: grid;
+  gap: var(--space-16);
+}
+
+.grid--recent,
+.grid--trend-top {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.grid--trend-bottom,
+.grid--magazin {
+  grid-template-columns: 1fr;
+}
+
+.trend {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-16);
+}
+
+/* 카드 : 높이 대신 aspect-ratio(가로/세로 비율)로 지정
+   → 화면 너비가 바뀌어도 시안 비율이 그대로 유지됩니다. */
+.card {
+  border: 1px solid var(--color-black);
+  background: var(--color-gray-100);
+}
+
+.card--square  { aspect-ratio: 163.5 / 164; }
+.card--wide    { aspect-ratio: 343 / 164; }
+.card--magazin { aspect-ratio: 343 / 305; }
+
+
+/* ---------------------------------------------------------
+   STEP 3. PC 확장 (1024px 이상)
+   모바일에서 작성한 스타일 중 "달라지는 부분만" 덮어씁니다.
+   --------------------------------------------------------- */
+@media (min-width: 1024px) {
+
+  /* 조건부 노출: PC 전용 요소 보이기 / 모바일 전용 요소 숨기기 */
+  .pc-only { display: block; }
+  .mo-only { display: none; }
+
+  /* 헤더 */
+  .logo {
+    width: 52px;
+    height: 52px;
+  }
+
+  .header__util {
+    display: flex;
+    align-items: center;
+    gap: var(--space-80);
+  }
+
+  .gnb {
+    display: flex;
+    gap: var(--space-24);
+  }
+
+  .gnb__item {
+    display: block;
+    width: 36px;
+    height: 36px;
+    background: var(--color-black);
+  }
+
+  .profile img {
+    width: 36px;
+    height: 36px;
+  }
+
+  /* 타이틀 */
+  .hero {
+    gap: var(--space-20);
+  }
+
+  .hero__title {
+    font-size: 4.5rem;      /* 72px */
+    line-height: 1.4;
+  }
+
+  .hero__dot {
+    width: 16px;
+    height: 16px;
+    margin-bottom: var(--space-24);
+  }
+
+  /* 검색: 전체 폭이 아닌 최대 1240px */
+  .search {
+    max-width: 1240px;
+    height: 60px;
+  }
+
+  .search__input {
+    padding-inline: var(--space-28);
+    font-size: 1.5rem;      /* 24px */
+  }
+
+  .search__btn {
+    padding-inline: var(--space-56);
+    font-size: 1.5rem;      /* 24px */
+  }
+
+  /* 섹션 */
+  .section__head {
+    margin-bottom: var(--space-16);
+  }
+
+  .section__title {
+    font-size: 1.875rem;    /* 30px */
+  }
+
+  .section__more img {
+    width: 45px;
+    height: 45px;
+  }
+
+  /* 그리드: 열 개수 늘리기 */
+  .grid,
+  .trend {
+    gap: var(--space-24);
+  }
+
+  .grid--recent      { grid-template-columns: repeat(5, 1fr); }
+  .grid--trend-top   { grid-template-columns: repeat(4, 1fr); }
+  .grid--trend-bottom{ grid-template-columns: repeat(2, 1fr); }
+  .grid--magazin     { grid-template-columns: repeat(3, 1fr); }
+
+  /* 카드 비율: PC 시안 기준 */
+  .grid--recent .card--square    { aspect-ratio: 292 / 298; }
+  .grid--trend-top .card--square { aspect-ratio: 371 / 377; }
+  .card--wide                    { aspect-ratio: 766 / 368; }
+  .card--magazin                 { aspect-ratio: 502.67 / 452; }
+}

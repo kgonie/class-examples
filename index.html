@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <!-- [반응형 필수] 기기 너비에 맞춰 화면을 그리도록 설정. 없으면 모바일에서 PC 화면이 축소되어 보입니다. -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Show Your Mood - 모바일 퍼스트 반응형 예제</title>
+
+  <!-- 폰트: Pretendard -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- ================= HEADER ================= -->
+  <header class="header">
+    <div class="container header__inner">
+      <a href="#" class="logo" aria-label="홈으로"></a>
+
+      <!-- 모바일 전용: 햄버거 메뉴 버튼 (PC에서는 숨김) -->
+      <button type="button" class="btn-menu mo-only" aria-label="메뉴 열기"></button>
+
+      <!-- PC 전용: 유틸 메뉴 (모바일에서는 숨김) -->
+      <div class="header__util pc-only">
+        <ul class="gnb">
+          <li><a href="#" class="gnb__item" aria-label="메뉴 1"></a></li>
+          <li><a href="#" class="gnb__item" aria-label="메뉴 2"></a></li>
+        </ul>
+        <a href="#" class="profile" aria-label="마이페이지">
+          <img src="images/icon-circle.svg" alt="" width="36" height="36">
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- ================= MAIN ================= -->
+  <main class="main container">
+
+    <!-- 타이틀 -->
+    <div class="hero">
+      <h1 class="hero__title">Show<br>Your<br>Mood</h1>
+      <span class="hero__dot" aria-hidden="true"></span>
+    </div>
+
+    <div class="content">
+
+      <!-- 검색 -->
+      <form class="search" action="#" role="search">
+        <label for="keyword" class="blind">검색어</label>
+        <input type="search" id="keyword" class="search__input" placeholder="Nature">
+        <button type="submit" class="search__btn">Search</button>
+      </form>
+
+      <div class="sections">
+
+        <!-- RECENT : 모바일 2개 → PC 5개 -->
+        <section class="section">
+          <div class="section__head">
+            <h2 class="section__title">Recent</h2>
+            <a href="#" class="section__more" aria-label="Recent 더보기">
+              <img src="images/arrow-up-right.svg" alt="">
+            </a>
+          </div>
+          <ul class="grid grid--recent">
+            <li class="card card--square"></li>
+            <li class="card card--square"></li>
+            <!-- 아래 3개는 PC에서만 노출 (조건부 노출) -->
+            <li class="card card--square pc-only"></li>
+            <li class="card card--square pc-only"></li>
+            <li class="card card--square pc-only"></li>
+          </ul>
+        </section>
+
+        <!-- TREND : 모바일 2개+1개 → PC 4개+2개 -->
+        <section class="section">
+          <div class="section__head">
+            <h2 class="section__title">Trend</h2>
+            <a href="#" class="section__more" aria-label="Trend 더보기">
+              <img src="images/arrow-up-right.svg" alt="">
+            </a>
+          </div>
+          <div class="trend">
+            <ul class="grid grid--trend-top">
+              <li class="card card--square"></li>
+              <li class="card card--square"></li>
+              <li class="card card--square pc-only"></li>
+              <li class="card card--square pc-only"></li>
+            </ul>
+            <ul class="grid grid--trend-bottom">
+              <li class="card card--wide"></li>
+              <li class="card card--wide pc-only"></li>
+            </ul>
+          </div>
+        </section>
+
+        <!-- MAGAZIN : 모바일 1개 → PC 3개 -->
+        <section class="section">
+          <div class="section__head">
+            <h2 class="section__title">Magazin</h2>
+            <a href="#" class="section__more" aria-label="Magazin 더보기">
+              <img src="images/arrow-up-right.svg" alt="">
+            </a>
+          </div>
+          <ul class="grid grid--magazin">
+            <li class="card card--magazin"></li>
+            <li class="card card--magazin pc-only"></li>
+            <li class="card card--magazin pc-only"></li>
+          </ul>
+        </section>
+
+      </div>
+    </div>
+  </main>
+
+</body>
+</html>
