@@ -7,7 +7,14 @@
    STEP 0. 초기화(Reset)
    STEP 1. 디자인 토큰 (변수)
    STEP 2. 모바일 기본 스타일 (375px 시안 기준) ← 미디어쿼리 없이 작성
-   STEP 3. PC 확장 (@media min-width: 1024px) ← 바뀌는 것만 덮어쓰기
+   STEP 3. 태블릿·PC 확장 (@media min-width: 769px)  ← 바뀌는 것만 덮어쓰기
+   STEP 4. 와이드 PC 확장 (@media min-width: 1440px)
+
+   [브레이크포인트별 카드 개수]
+   화면 폭          RECENT   TREND              MAGAZIN
+   768px 이하       2개      위 2개 + 아래 1개   1개
+   769px~1439px     3개      위 4개 + 아래 2개   3개
+   1440px 이상      5개      위 4개 + 아래 2개   3개
 
    [단위 원칙]
    - 컴포넌트 내부 여백 → space 토큰 (--space-*)
@@ -81,7 +88,7 @@ img {
   --layout-bottom:   clamp(60px, 1.29vw + 55.15px, 80px);   /* 페이지 하단 60 → 80 */
   --layout-hero:     clamp(20px, 1.29vw + 15.15px, 40px);   /* 타이틀 ~ 검색 20 → 40 */
   --layout-content:  clamp(28px, 1.81vw + 21.2px, 56px);    /* 검색 ~ 섹션 28 → 56 */
-  --layout-section:  clamp(28px, 0.78vw + 25.09px, 40px);   /* 섹션 ~ 섹션 28 → 40 */
+  --layout-section:  clamp(24px, 1.04vw + 20.12px, 40px);   /* 섹션 ~ 섹션 24 → 40 (RECENT·TREND·MAGAZIN 사이) */
 }
 
 
@@ -94,8 +101,9 @@ body {
   background: var(--color-white);
 }
 
-/* 모바일 퍼스트: PC 전용 요소는 기본으로 숨김 */
-.pc-only { display: none; }
+/* 모바일 퍼스트: 넓은 화면 전용 요소는 기본으로 숨김 */
+.pc-only { display: none; }   /* 769px 이상에서 노출 */
+.lg-only { display: none; }   /* 1440px 이상에서 노출 */
 
 /* 공통 컨테이너: 좌우 여백 + 최대 너비 */
 .container {
@@ -258,12 +266,12 @@ body {
 
 
 /* ---------------------------------------------------------
-   STEP 3. PC 확장 (1024px 이상)
+   STEP 3. 태블릿·PC 확장 (769px 이상)
    모바일에서 작성한 스타일 중 "달라지는 부분만" 덮어씁니다.
    --------------------------------------------------------- */
-@media (min-width: 1024px) {
+@media (min-width: 769px) {
 
-  /* 조건부 노출: PC 전용 요소 보이기 / 모바일 전용 요소 숨기기 */
+  /* 조건부 노출: 769px 이상 요소 보이기 / 모바일 전용 요소 숨기기 */
   .pc-only { display: block; }
   .mo-only { display: none; }
 
@@ -348,7 +356,7 @@ body {
     gap: var(--space-24);
   }
 
-  .grid--recent      { grid-template-columns: repeat(5, 1fr); }
+  .grid--recent      { grid-template-columns: repeat(3, 1fr); }
   .grid--trend-top   { grid-template-columns: repeat(4, 1fr); }
   .grid--trend-bottom{ grid-template-columns: repeat(2, 1fr); }
   .grid--magazin     { grid-template-columns: repeat(3, 1fr); }
@@ -358,4 +366,16 @@ body {
   .grid--trend-top .card--square { aspect-ratio: 371 / 377; }
   .card--wide                    { aspect-ratio: 766 / 368; }
   .card--magazin                 { aspect-ratio: 502.67 / 452; }
+}
+
+
+/* ---------------------------------------------------------
+   STEP 4. 와이드 PC 확장 (1440px 이상)
+   RECENT만 3개 → 5개로 늘어납니다.
+   --------------------------------------------------------- */
+@media (min-width: 1440px) {
+
+  .lg-only { display: block; }
+
+  .grid--recent { grid-template-columns: repeat(5, 1fr); }
 }
