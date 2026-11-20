@@ -75,6 +75,7 @@ img {
   --space-20: 20px;
   --space-24: 24px;
   --space-28: 28px;
+  --space-32: 32px;
   --space-56: 56px;
   --space-80: 80px;
 
@@ -294,17 +295,17 @@ body {
 
   .gnb {
     display: flex;
-    gap: var(--space-24);
+    gap: var(--space-32);
   }
 
   .gnb__item {
     display: block;
     width: 36px;
     height: 36px;
-    background: var(--color-black);
   }
 
-  .profile img {
+  .gnb__item img {
+    display: block;
     width: 36px;
     height: 36px;
   }
