@@ -156,7 +156,9 @@ body {
 }
 
 .hero__title {
-  font-size: 2rem;          /* 32px */
+  /* 전체 구간 유동 폰트: 375px에서 32px → 1920px에서 72px
+     rem + vw를 섞어 쓰는 이유: vw만 쓰면 브라우저 글자 크기 설정이 반영되지 않음 */
+  font-size: clamp(2rem, 1.393rem + 2.59vw, 4.5rem);
   font-weight: 700;
   line-height: 1.5;
   text-transform: uppercase;
@@ -310,7 +312,7 @@ body {
   }
 
   .hero__title {
-    font-size: 4.5rem;      /* 72px */
+    /* font-size는 clamp로 자동 변화하므로 여기서 다시 지정하지 않음 */
     line-height: 1.4;
   }
 
