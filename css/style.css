@@ -129,8 +129,11 @@ body {
 
 .logo {
   display: block;
-  width: 32px;
-  height: 32px;
+  /* 전체 구간 유동 크기: 375px에서 32px → 1920px에서 52px (rem + vw)
+     로고가 헤더에서 가장 크므로 헤더 높이도 49px → 69px로 함께 변함 */
+  width: clamp(2rem, 1.697rem + 1.294vw, 3.25rem);
+  height: auto;
+  aspect-ratio: 1 / 1;
   background: var(--color-black);
 }
 
@@ -290,10 +293,7 @@ body {
   .mo-only { display: none; }
 
   /* 헤더 */
-  .logo {
-    width: 52px;
-    height: 52px;
-  }
+  /* 로고 크기는 clamp로 자동 변화하므로 여기서 다시 지정하지 않음 */
 
   .header__util {
     display: flex;
