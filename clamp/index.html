@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>clamp · rem · vw 이해하기 - 반응형 수업 예제</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+  <style>
+    /* ===== 기본 ===== */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --black: #222;
+      --gray-100: #f2f2f2;
+      --gray-200: #d9d9d9;
+      --gray-500: #777;
+      --green: #cfdccb;
+      --green-dark: #3d5a35;
+      --purple: #e3e0fb;
+      --purple-dark: #3c3489;
+      --teal: #c6eedf;
+      --teal-dark: #085041;
+      --red: #b3261e;
+
+      /* 이 페이지도 clamp로 만들었어요 */
+      --gutter: clamp(16px, 10.74vw - 24.29px, 182px);
+      --section-gap: clamp(48px, 2.07vw + 40.23px, 80px);
+    }
+    body {
+      font-family: "Pretendard", -apple-system, BlinkMacSystemFont, sans-serif;
+      color: var(--black);
+      background: #fff;
+      line-height: 1.7;
+      font-size: 1rem;
+    }
+    code, pre { font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace; }
+    .wrap { max-width: 1100px; margin-inline: auto; padding-inline: var(--gutter); }
+
+    /* ===== 상단 ===== */
+    .top {
+      position: sticky; top: 0; z-index: 10;
+      background: #fff; border-bottom: 1px solid var(--black);
+    }
+    .top .wrap {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 12px; padding-block: 10px; font-size: 0.875rem;
+    }
+    .top a { color: inherit; }
+    .badge {
+      display: inline-flex; gap: 6px; align-items: center;
+      padding: 4px 10px; background: var(--green); border: 1px solid var(--black);
+      font-weight: 600; white-space: nowrap;
+    }
+
+    /* ===== 타이틀 ===== */
+    .hero { padding-block: clamp(40px, 2.59vw + 30.29px, 80px) 0; }
+    .hero__eyebrow { font-size: 0.875rem; font-weight: 600; letter-spacing: 0.08em; color: var(--gray-500); }
+    .hero__title {
+      font-size: clamp(2rem, 1.393rem + 2.59vw, 4.5rem);
+      line-height: 1.25; font-weight: 700; margin: 8px 0 16px;
+    }
+    .hero__desc { max-width: 640px; color: #444; }
+    .toc { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 24px; }
+    .toc a {
+      font-size: 0.875rem; color: inherit; text-decoration: none;
+      border: 1px solid var(--black); padding: 4px 12px;
+    }
+    .toc a:hover { background: var(--green); }
+
+    /* ===== 섹션 ===== */
+    main { display: flex; flex-direction: column; gap: var(--section-gap); padding-block: var(--section-gap); }
+    .step { scroll-margin-top: 70px; }
+    .step__num { font-size: 0.875rem; font-weight: 700; color: var(--gray-500); }
+    .step__title {
+      font-size: clamp(1.25rem, 1.098rem + 0.647vw, 1.875rem);
+      font-weight: 700; line-height: 1.4; margin: 4px 0 16px;
+    }
+    .step p + p { margin-top: 12px; }
+    .step strong { background: linear-gradient(transparent 60%, var(--green) 60%); }
+
+    pre {
+      background: var(--black); color: #f5f5f5;
+      padding: 16px 20px; margin: 16px 0; overflow-x: auto;
+      font-size: 0.9rem; line-height: 1.6;
+    }
+    pre .c { color: #9fd49a; }
+    :not(pre) > code { background: var(--gray-100); padding: 1px 6px; font-size: 0.9em; }
+
+    .box { border: 1px solid var(--black); padding: clamp(16px, 0.52vw + 14.06px, 24px); margin-top: 16px; }
+    .box--tip { background: var(--gray-100); border-style: dashed; }
+    .label { font-size: 0.8125rem; font-weight: 600; color: var(--gray-500); }
+
+    table { width: 100%; border-collapse: collapse; margin-top: 16px; font-size: 0.9375rem; }
+    th, td { border: 1px solid var(--black); padding: 8px 12px; text-align: left; vertical-align: top; }
+    th { background: var(--green); font-weight: 600; }
+    .table-wrap { overflow-x: auto; }
+
+    /* ===== 라이브 수치 ===== */
+    .meter { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; margin-top: 16px; }
+    .meter div { background: var(--gray-100); padding: 12px 16px; }
+    .meter b { display: block; font-size: 1.5rem; line-height: 1.3; }
+
+    .bar { display: flex; height: 36px; margin-top: 12px; background: var(--gray-100); overflow: hidden; }
+    .bar span { display: flex; align-items: center; justify-content: center; font-size: 0.8125rem; font-weight: 600; white-space: nowrap; overflow: hidden; }
+    .bar .fixed { background: var(--purple); color: var(--purple-dark); }
+    .bar .grow { background: var(--teal); color: var(--teal-dark); }
+    .legend { display: flex; flex-wrap: wrap; gap: 16px; font-size: 0.8125rem; margin-top: 8px; color: #444; }
+    .legend i { display: inline-block; width: 10px; height: 10px; margin-right: 6px; }
+
+    /* ===== 비교 카드 ===== */
+    .compare { display: grid; grid-template-columns: 1fr; gap: 12px; margin-top: 16px; }
+    .sample { border: 1px solid var(--black); padding: 16px; overflow: hidden; }
+    .sample__head { display: flex; justify-content: space-between; gap: 8px; font-size: 0.8125rem; margin-bottom: 8px; }
+    .sample__head code { font-size: 0.75rem; }
+    .sample__text { font-weight: 700; line-height: 1.2; white-space: nowrap; }
+    .sample__px { font-weight: 700; color: var(--green-dark); }
+
+    .demo-vw-only   { font-size: 8.53vw; }
+    .demo-rem-only  { font-size: 2rem; }
+    .demo-rem-vw    { font-size: clamp(2rem, 1.393rem + 2.59vw, 4.5rem); }
+    .demo-no-clamp  { font-size: calc(1.393rem + 2.59vw); }
+
+    .btns { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+    .btn {
+      font: inherit; font-size: 0.875rem; cursor: pointer;
+      border: 1px solid var(--black); background: #fff; padding: 6px 14px;
+    }
+    .btn[aria-pressed="true"] { background: var(--black); color: #fff; }
+
+    /* ===== 그래프 ===== */
+    .chart { width: 100%; height: auto; display: block; margin-top: 16px; border: 1px solid var(--black); background: #fff; }
+
+    /* ===== 계산기 ===== */
+    .calc { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-top: 16px; }
+    .calc label { display: flex; flex-direction: column; gap: 4px; font-size: 0.8125rem; font-weight: 600; }
+    .calc input, .calc select {
+      font: inherit; font-size: 1rem; padding: 8px 10px;
+      border: 1px solid var(--black); background: #fff; width: 100%;
+    }
+    .result { display: flex; gap: 8px; align-items: stretch; margin-top: 16px; }
+    .result pre { flex: 1; margin: 0; }
+    .result .btn { flex-shrink: 0; }
+    .preview { margin-top: 12px; font-weight: 700; line-height: 1.3; overflow-wrap: anywhere; }
+
+    /* ===== 실습 ===== */
+    details { border: 1px solid var(--black); margin-top: 12px; }
+    summary { cursor: pointer; padding: 12px 16px; font-weight: 600; list-style: none; display: flex; justify-content: space-between; gap: 12px; }
+    summary::-webkit-details-marker { display: none; }
+    summary::after { content: "정답 보기 +"; font-size: 0.8125rem; font-weight: 500; color: var(--gray-500); white-space: nowrap; }
+    details[open] summary::after { content: "닫기 −"; }
+    details[open] summary { border-bottom: 1px solid var(--black); background: var(--green); }
+    details .answer { padding: 12px 16px; }
+    details pre { margin: 8px 0 0; }
+
+    footer { border-top: 1px solid var(--black); padding-block: 24px; font-size: 0.875rem; color: var(--gray-500); }
+    footer a { color: inherit; }
+
+    /* ===== 넓은 화면 ===== */
+    @media (min-width: 768px) {
+      .compare { grid-template-columns: repeat(2, 1fr); }
+      .calc { grid-template-columns: repeat(4, 1fr); }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="top">
+    <div class="wrap">
+      <a href="../">← 반응형 예제로</a>
+      <span class="badge">지금 화면 폭 <span id="vw-now">-</span></span>
+    </div>
+  </header>
+
+  <div class="wrap">
+    <section class="hero">
+      <p class="hero__eyebrow">RESPONSIVE · FLUID TYPE</p>
+      <h1 class="hero__title">clamp · rem · vw<br>같이 쓰는 법</h1>
+      <p class="hero__desc">
+        브라우저 창 너비를 줄였다 늘렸다 해 보세요. 이 제목도 <code>clamp()</code>로 만들어서,
+        375px에서 32px, 1920px에서 72px 사이를 자연스럽게 오가요.
+      </p>
+      <nav class="toc" aria-label="목차">
+        <a href="#s1">1. clamp는 세 칸</a>
+        <a href="#s2">2. 고정 + 늘어나는 부분</a>
+        <a href="#s3">3. vw만 쓰면 안 되는 이유</a>
+        <a href="#s4">4. clamp와 vw의 관계</a>
+        <a href="#s5">5. 숫자 구하는 법</a>
+        <a href="#s6">6. 실습</a>
+      </nav>
+    </section>
+  </div>
+
+  <main class="wrap">
+
+    <!-- ===================== 1 ===================== -->
+    <section class="step" id="s1">
+      <p class="step__num">STEP 1</p>
+      <h2 class="step__title">clamp는 세 칸이에요</h2>
+<pre><span class="c">/* clamp(최소값, 선호값, 최대값) */</span>
+font-size: clamp(2rem,  1.393rem + 2.59vw,  4.5rem);</pre>
+      <p>브라우저는 가운데 <strong>선호값</strong>을 먼저 계산해요.
+        그 값이 최소값보다 작으면 최소값을, 최대값보다 크면 최대값을 써요.</p>
+      <div class="box box--tip">
+        <p class="label">알아두기</p>
+        <p><code>clamp(A, B, C)</code>는 <code>max(A, min(B, C))</code>와 같아요.
+          B가 C를 넘지 않게 자르고, A보다 작아지지 않게 올리는 거예요.
+          "clamp는 max와 min을 한 번에 쓰는 지름길"이에요.</p>
+      </div>
+    </section>
+
+    <!-- ===================== 2 ===================== -->
+    <section class="step" id="s2">
+      <p class="step__num">STEP 2</p>
+      <h2 class="step__title">가운데 값은 "고정 부분 + 늘어나는 부분"이에요</h2>
+      <p><code>1.393rem</code>은 <strong>고정 부분</strong>이에요. 약 22px로, 화면 너비와 상관없이 항상 깔려 있어요.<br>
+        <code>2.59vw</code>는 <strong>늘어나는 부분</strong>이에요. 화면 너비의 2.59%라서 화면이 넓어질수록 커져요.</p>
+      <p>비유하면 <strong>기본급(rem) + 성과급(vw)</strong>이에요. 기본급은 누구나 받고, 성과급은 화면이 넓을수록 많이 받아요.
+        그리고 clamp가 "최저 32px, 최고 72px"로 상한과 하한을 정해요.</p>
+
+      <div class="box">
+        <p class="label">지금 내 화면에서 계산해 보면 (창 크기를 바꿔 보세요)</p>
+        <div class="bar" aria-hidden="true">
+          <span class="fixed" id="bar-fixed"></span>
+          <span class="grow" id="bar-grow"></span>
+        </div>
+        <div class="legend">
+          <span><i style="background:var(--purple)"></i>고정 부분 1.393rem</span>
+          <span><i style="background:var(--teal)"></i>늘어나는 부분 2.59vw</span>
+        </div>
+        <div class="meter">
+          <div>화면 폭<b id="m-width">-</b></div>
+          <div>고정 + 늘어나는<b id="m-sum">-</b></div>
+          <div>clamp 결과<b id="m-result">-</b></div>
+        </div>
+        <p id="m-state" style="margin-top:12px;font-size:0.875rem"></p>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>화면 폭</th><th>고정 부분</th><th>+ 늘어나는 부분</th><th>= 결과</th></tr></thead>
+          <tbody>
+            <tr><td>375px</td><td>22.3px</td><td>9.7px</td><td><b>32px</b></td></tr>
+            <tr><td>1024px</td><td>22.3px</td><td>26.5px</td><td><b>48.8px</b></td></tr>
+            <tr><td>1920px</td><td>22.3px</td><td>49.7px</td><td><b>72px</b></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ===================== 3 ===================== -->
+    <section class="step" id="s3">
+      <p class="step__num">STEP 3</p>
+      <h2 class="step__title">왜 vw만 쓰면 안 될까요?</h2>
+      <p><code>font-size: 8.53vw</code>처럼 vw만 써도 375px에서 32px가 나와요.
+        하지만 vw는 <strong>화면 너비만</strong> 보는 단위라서, 사용자가 브라우저 설정에서 글자 크기를 키워도 반영되지 않아요.
+        눈이 불편해서 글자를 크게 설정해 둔 사람에게도 글씨가 그대로 보이는 거죠.</p>
+      <p>rem은 <strong>브라우저 기본 글자 크기</strong>를 기준으로 해요.
+        rem을 섞어 두면 사용자가 글자 크기를 키울 때 고정 부분, 최소값, 최대값이 모두 같이 커져요.</p>
+
+      <div class="box">
+        <p class="label">브라우저 기본 글자 크기 바꿔 보기 (설정 변경을 흉내 내요)</p>
+        <div class="btns" role="group" aria-label="기본 글자 크기">
+          <button type="button" class="btn" data-root="16" aria-pressed="true">16px (기본)</button>
+          <button type="button" class="btn" data-root="20" aria-pressed="false">20px (크게)</button>
+          <button type="button" class="btn" data-root="24" aria-pressed="false">24px (아주 크게)</button>
+        </div>
+        <div class="compare">
+          <div class="sample">
+            <div class="sample__head"><code>8.53vw</code><span>vw만 → <span class="sample__px" data-px-of="d-vw">-</span></span></div>
+            <div class="sample__text demo-vw-only" id="d-vw">MOOD</div>
+          </div>
+          <div class="sample">
+            <div class="sample__head"><code>clamp(2rem, 1.393rem + 2.59vw, 4.5rem)</code><span>rem + vw → <span class="sample__px" data-px-of="d-remvw">-</span></span></div>
+            <div class="sample__text demo-rem-vw" id="d-remvw">MOOD</div>
+          </div>
+        </div>
+        <p style="margin-top:12px;font-size:0.875rem">버튼을 눌러 보면 rem + vw 쪽만 커지고, vw만 쓴 쪽은 그대로예요. (넓은 화면에서 vw만 쓴 글씨가 상자를 넘치는 것도 같은 문제예요.)</p>
+      </div>
+    </section>
+
+    <!-- ===================== 4 ===================== -->
+    <section class="step" id="s4">
+      <p class="step__num">STEP 4</p>
+      <h2 class="step__title">clamp와 vw의 관계</h2>
+      <p>한 문장으로 말하면 <strong>vw는 "늘어나게 하는 힘", clamp는 "멈추게 하는 울타리"</strong>예요. 둘은 역할이 달라서 같이 써야 완성돼요.</p>
+
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>이렇게 쓰면</th><th>결과</th></tr></thead>
+          <tbody>
+            <tr><td><code>font-size: 8.53vw</code><br>vw만</td><td>멈추지 않아요. 320px 휴대폰에서 27px, 1920px 모니터에서 164px, 2560px에서 218px까지 커져요.</td></tr>
+            <tr><td><code>clamp(32px, 40px, 72px)</code><br>clamp만</td><td>아무 일도 안 일어나요. 가운데가 고정값이라 항상 40px예요.</td></tr>
+            <tr><td><code>clamp(2rem, 1.393rem + 2.59vw, 4.5rem)</code><br>둘을 합치면</td><td>"자라다가 멈추는" 크기가 돼요. 32px 아래로도, 72px 위로도 가지 않아요.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="box">
+        <p class="label">화면 폭에 따른 글자 크기 (세로 점선 = 지금 내 화면)</p>
+        <svg class="chart" id="chart" viewBox="0 0 640 340" role="img" aria-labelledby="chart-t chart-d">
+          <title id="chart-t">화면 폭에 따른 폰트 크기 그래프</title>
+          <desc id="chart-d">vw만 쓴 선은 계속 올라가고, clamp를 적용한 선은 375px 이하와 1920px 이상에서 평평합니다.</desc>
+        </svg>
+        <div class="legend">
+          <span><i style="background:#d85a30"></i>vw만 (8.53vw)</span>
+          <span><i style="background:#888"></i>clamp 없이 (1.393rem + 2.59vw)</span>
+          <span><i style="background:#222"></i>clamp 적용</span>
+        </div>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th></th><th>하는 일</th><th>혼자 쓰면</th></tr></thead>
+          <tbody>
+            <tr><th>vw</th><td>화면 폭에 따라 값을 바꿈</td><td>끝없이 커지거나 작아짐</td></tr>
+            <tr><th>rem</th><td>사용자 글자 설정을 반영함</td><td>화면 폭에 반응하지 않음</td></tr>
+            <tr><th>clamp</th><td>최소값과 최대값을 정함</td><td>가운데가 고정값이면 의미 없음</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="box box--tip">
+        <p class="label">clamp는 폰트 전용이 아니에요</p>
+        <p>좌우 여백, 섹션 간격처럼 길이를 쓰는 곳이면 어디든 쓸 수 있어요. 이 페이지의 좌우 여백과 섹션 간격도 clamp로 만들었어요.</p>
+<pre>--gutter: clamp(16px, 10.74vw - 24.29px, 182px);  <span class="c">/* 좌우 여백 16 → 182 */</span></pre>
+      </div>
+    </section>
+
+    <!-- ===================== 5 ===================== -->
+    <section class="step" id="s5">
+      <p class="step__num">STEP 5</p>
+      <h2 class="step__title">숫자 구하는 법</h2>
+      <p>"375px에서 32px, 1920px에서 72px"처럼 원하는 값만 정하면 돼요.</p>
+<pre><span class="c">/* ① 늘어나는 부분(vw) = (최대 크기 - 최소 크기) ÷ (최대 화면 - 최소 화면) × 100 */</span>
+(72 - 32) ÷ (1920 - 375) × 100 = 2.59vw
+
+<span class="c">/* ② 고정 부분(px) = 최소 크기 - vw값 × (최소 화면 ÷ 100) */</span>
+32 - 2.59 × 3.75 = 22.29px
+
+<span class="c">/* ③ 고정 부분을 rem으로 = px ÷ 16 */</span>
+22.29 ÷ 16 = 1.393rem
+
+<span class="c">/* ④ 조립 */</span>
+font-size: clamp(2rem, 1.393rem + 2.59vw, 4.5rem);</pre>
+
+      <div class="box">
+        <p class="label">clamp 계산기 (값을 바꾸면 바로 계산돼요)</p>
+        <div class="calc">
+          <label>최소 크기(px)<input type="number" id="c-min" value="32" min="0" step="1"></label>
+          <label>최대 크기(px)<input type="number" id="c-max" value="72" min="0" step="1"></label>
+          <label>최소 화면(px)<input type="number" id="c-wmin" value="375" min="1" step="1"></label>
+          <label>최대 화면(px)<input type="number" id="c-wmax" value="1920" min="1" step="1"></label>
+          <label>단위
+            <select id="c-unit">
+              <option value="rem">rem (폰트 추천)</option>
+              <option value="px">px (여백·간격)</option>
+            </select>
+          </label>
+        </div>
+        <p id="c-error" role="alert" style="color:var(--red);font-size:0.875rem;margin-top:8px"></p>
+        <div class="result">
+          <pre id="c-out">-</pre>
+          <button type="button" class="btn" id="c-copy">복사</button>
+        </div>
+        <p class="label" style="margin-top:12px">미리보기 (지금 화면 폭 기준)</p>
+        <p class="preview" id="c-preview">Show Your Mood</p>
+      </div>
+    </section>
+
+    <!-- ===================== 6 ===================== -->
+    <section class="step" id="s6">
+      <p class="step__num">STEP 6</p>
+      <h2 class="step__title">실습</h2>
+      <p>화면 375px ~ 1920px 기준으로 직접 계산해 보세요. 다 풀고 계산기로 확인해도 좋아요.</p>
+
+      <details>
+        <summary>Q1. 섹션 타이틀: 20px → 30px (rem 사용)</summary>
+        <div class="answer">
+          <p>vw = (30 − 20) ÷ 1545 × 100 = 0.647vw<br>
+            고정 = 20 − 0.647 × 3.75 = 17.57px → 1.098rem</p>
+<pre>font-size: clamp(1.25rem, 1.098rem + 0.647vw, 1.875rem);</pre>
+        </div>
+      </details>
+
+      <details>
+        <summary>Q2. 섹션 사이 간격: 24px → 40px (px 사용)</summary>
+        <div class="answer">
+          <p>vw = (40 − 24) ÷ 1545 × 100 = 1.04vw<br>
+            고정 = 24 − 1.04 × 3.75 = 20.12px</p>
+<pre>gap: clamp(24px, 1.04vw + 20.12px, 40px);</pre>
+          <p>레이아웃 여백은 글자 설정과 관계가 적어서 px로 써도 괜찮아요.</p>
+        </div>
+      </details>
+
+      <details>
+        <summary>Q3. 아이콘 크기: 24px → 45px (rem 사용)</summary>
+        <div class="answer">
+          <p>vw = (45 − 24) ÷ 1545 × 100 = 1.359vw<br>
+            고정 = 24 − 1.359 × 3.75 = 18.9px → 1.181rem</p>
+<pre>width: clamp(1.5rem, 1.181rem + 1.359vw, 2.8125rem);</pre>
+        </div>
+      </details>
+
+      <details>
+        <summary>Q4. 생각해 보기: clamp(32px, 40px, 72px)는 1920px 화면에서 몇 px일까요?</summary>
+        <div class="answer">
+          <p><b>40px</b>예요. 가운데 값에 vw가 없어서 화면 폭이 바뀌어도 값이 변하지 않아요.
+            clamp는 가운데 값이 <strong>변하는 값</strong>일 때만 의미가 있어요.</p>
+        </div>
+      </details>
+
+      <details>
+        <summary>Q5. 생각해 보기: font-size: 5vw의 문제점 두 가지는?</summary>
+        <div class="answer">
+          <p>① 최소·최대가 없어서 작은 휴대폰에서는 너무 작고, 큰 모니터에서는 끝없이 커져요.<br>
+            ② 사용자가 브라우저 글자 크기를 키워도 반영되지 않아요. (접근성 문제)</p>
+        </div>
+      </details>
+    </section>
+
+  </main>
+
+  <footer>
+    <div class="wrap">
+      반응형 웹 수업 예제 · <a href="../">메인 예제(Show Your Mood) 보기</a>
+    </div>
+  </footer>
+
+  <script>
+    // 현재 html 글자 크기(px) - rem 계산 기준
+    function rootPx() {
+      return parseFloat(getComputedStyle(document.documentElement).fontSize);
+    }
+    function r1(n) { return Math.round(n * 10) / 10; }
+
+    // ---------- STEP 2 / 3 라이브 수치 ----------
+    function updateLive() {
+      var w = window.innerWidth;
+      var base = rootPx();
+      var fixed = 1.393 * base;
+      var grow = 2.59 * w / 100;
+      var sum = fixed + grow;
+      var min = 2 * base, max = 4.5 * base;
+      var result = Math.min(Math.max(sum, min), max);
+
+      document.getElementById('vw-now').textContent = w + 'px';
+      document.getElementById('m-width').textContent = w + 'px';
+      document.getElementById('m-sum').textContent = r1(sum) + 'px';
+      document.getElementById('m-result').textContent = r1(result) + 'px';
+
+      var total = Math.max(sum, max);
+      var f = document.getElementById('bar-fixed');
+      var g = document.getElementById('bar-grow');
+      f.style.width = (fixed / total * 100) + '%';
+      g.style.width = (grow / total * 100) + '%';
+      f.textContent = r1(fixed) + 'px';
+      g.textContent = '+ ' + r1(grow) + 'px';
+
+      var state = '계산값 ' + r1(sum) + 'px가 최소(' + r1(min) + 'px)와 최대(' + r1(max) + 'px) 사이라서 그대로 써요.';
+      if (sum < min) state = '계산값 ' + r1(sum) + 'px가 최소값보다 작아서 ' + r1(min) + 'px로 고정돼요.';
+      if (sum > max) state = '계산값 ' + r1(sum) + 'px가 최대값보다 커서 ' + r1(max) + 'px로 고정돼요.';
+      document.getElementById('m-state').textContent = state;
+
+      document.querySelectorAll('[data-px-of]').forEach(function (el) {
+        var t = document.getElementById(el.getAttribute('data-px-of'));
+        el.textContent = r1(parseFloat(getComputedStyle(t).fontSize)) + 'px';
+      });
+
+      drawChart();
+      updateCalc();
+    }
+
+    // ---------- STEP 3 기본 글자 크기 버튼 ----------
+    document.querySelectorAll('[data-root]').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        document.documentElement.style.fontSize = btn.getAttribute('data-root') + 'px';
+        document.querySelectorAll('[data-root]').forEach(function (b) {
+          b.setAttribute('aria-pressed', b === btn ? 'true' : 'false');
+        });
+        updateLive();
+      });
+    });
+
+    // ---------- STEP 4 그래프 ----------
+    function drawChart() {
+      var svg = document.getElementById('chart');
+      var W = 640, H = 340, L = 52, R = 16, T = 16, B = 44;
+      var xMin = 320, xMax = 2560, yMax = 220;
+      var base = 16;
+      function x(v) { return L + (v - xMin) / (xMax - xMin) * (W - L - R); }
+      function y(v) { return T + (1 - Math.min(v, yMax) / yMax) * (H - T - B); }
+      function line(fn, color, width, dash) {
+        var d = '';
+        for (var v = xMin; v <= xMax; v += 20) d += (d ? 'L' : 'M') + x(v).toFixed(1) + ' ' + y(fn(v)).toFixed(1);
+        return '<path d="' + d + '" fill="none" stroke="' + color + '" stroke-width="' + width + '"' + (dash ? ' stroke-dasharray="' + dash + '"' : '') + '/>';
+      }
+      var s = '<title id="chart-t">화면 폭에 따른 폰트 크기 그래프</title><desc id="chart-d">vw만 쓴 선은 계속 올라가고, clamp를 적용한 선은 375px 이하와 1920px 이상에서 평평합니다.</desc>';
+      [0, 40, 80, 120, 160, 200].forEach(function (v) {
+        s += '<line x1="' + L + '" x2="' + (W - R) + '" y1="' + y(v) + '" y2="' + y(v) + '" stroke="#eee"/>';
+        s += '<text x="' + (L - 8) + '" y="' + (y(v) + 4) + '" font-size="11" text-anchor="end" fill="#777">' + v + '</text>';
+      });
+      [375, 768, 1440, 1920, 2560].forEach(function (v) {
+        s += '<text x="' + x(v) + '" y="' + (H - 24) + '" font-size="11" text-anchor="middle" fill="#777">' + v + '</text>';
+      });
+      s += '<text x="' + ((L + W - R) / 2) + '" y="' + (H - 6) + '" font-size="11" text-anchor="middle" fill="#777">화면 폭 (px)</text>';
+      s += '<text x="12" y="' + ((T + H - B) / 2) + '" font-size="11" text-anchor="middle" fill="#777" transform="rotate(-90 12 ' + ((T + H - B) / 2) + ')">글자 크기 (px)</text>';
+
+      s += line(function (v) { return 8.53 * v / 100; }, '#d85a30', 2);
+      s += line(function (v) { return 1.393 * base + 2.59 * v / 100; }, '#888', 2, '6 4');
+      s += line(function (v) { return Math.min(Math.max(1.393 * base + 2.59 * v / 100, 32), 72); }, '#222', 3);
+
+      var now = Math.min(Math.max(window.innerWidth, xMin), xMax);
+      s += '<line x1="' + x(now) + '" x2="' + x(now) + '" y1="' + T + '" y2="' + (H - B) + '" stroke="#3d5a35" stroke-dasharray="3 3"/>';
+      s += '<text x="' + (x(now) + 4) + '" y="' + (T + 12) + '" font-size="11" fill="#3d5a35">지금 ' + window.innerWidth + 'px</text>';
+      svg.innerHTML = s;
+    }
+
+    // ---------- STEP 5 계산기 ----------
+    var lastCode = '';
+    function trim(n, d) { return parseFloat(n.toFixed(d)).toString(); }
+    function updateCalc() {
+      var min = parseFloat(document.getElementById('c-min').value);
+      var max = parseFloat(document.getElementById('c-max').value);
+      var wmin = parseFloat(document.getElementById('c-wmin').value);
+      var wmax = parseFloat(document.getElementById('c-wmax').value);
+      var unit = document.getElementById('c-unit').value;
+      var err = document.getElementById('c-error');
+      var out = document.getElementById('c-out');
+
+      if ([min, max, wmin, wmax].some(isNaN)) { err.textContent = '네 칸을 모두 숫자로 입력해 주세요.'; out.textContent = '-'; lastCode = ''; return; }
+      if (wmax <= wmin) { err.textContent = '최대 화면은 최소 화면보다 커야 해요.'; out.textContent = '-'; lastCode = ''; return; }
+      if (max <= min) { err.textContent = '최대 크기는 최소 크기보다 커야 해요.'; out.textContent = '-'; lastCode = ''; return; }
+      err.textContent = '';
+
+      var slope = (max - min) / (wmax - wmin);
+      var vw = slope * 100;
+      var intercept = min - slope * wmin;
+      var minS, maxS, interS;
+      if (unit === 'rem') {
+        minS = trim(min / 16, 4) + 'rem';
+        maxS = trim(max / 16, 4) + 'rem';
+        interS = trim(intercept / 16, 3) + 'rem';
+      } else {
+        minS = trim(min, 2) + 'px';
+        maxS = trim(max, 2) + 'px';
+        interS = trim(intercept, 2) + 'px';
+      }
+      var vwS = trim(vw, 3) + 'vw';
+      var middle = intercept < 0
+        ? vwS + ' - ' + interS.replace('-', '')   // 고정 부분이 음수면 "vw - px" 순서로
+        : interS + ' + ' + vwS;
+      lastCode = 'clamp(' + minS + ', ' + middle + ', ' + maxS + ')';
+      out.textContent = lastCode;
+      var pv = document.getElementById('c-preview');
+      pv.style.fontSize = lastCode;
+      pv.textContent = 'Show Your Mood · ' + r1(parseFloat(getComputedStyle(pv).fontSize)) + 'px';
+    }
+    ['c-min', 'c-max', 'c-wmin', 'c-wmax', 'c-unit'].forEach(function (id) {
+      document.getElementById(id).addEventListener('input', updateCalc);
+    });
+    document.getElementById('c-copy').addEventListener('click', function () {
+      var btn = this;
+      if (!lastCode) return;
+      var done = function () { btn.textContent = '복사됨'; setTimeout(function () { btn.textContent = '복사'; }, 1200); };
+      if (navigator.clipboard) navigator.clipboard.writeText(lastCode).then(done, done); else done();
+    });
+
+    window.addEventListener('resize', updateLive);
+    updateLive();
+  </script>
+</body>
+</html>
