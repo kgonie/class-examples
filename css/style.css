@@ -308,14 +308,14 @@ body {
 
   .gnb__item {
     display: block;
-    width: 36px;
-    height: 36px;
+    width: 32px;
+    height: 32px;
   }
 
   .gnb__item img {
     display: block;
-    width: 36px;
-    height: 36px;
+    width: 32px;
+    height: 32px;
   }
 
   /* 타이틀 */
