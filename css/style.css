@@ -191,7 +191,8 @@ body {
   padding-inline: var(--space-20);
   border: 1px solid var(--color-black);
   background: var(--color-green-100);
-  font-size: 1rem;          /* 16px */
+  /* 전체 구간 유동 폰트: 375px에서 16px → 1920px에서 24px */
+  font-size: clamp(1rem, 0.879rem + 0.518vw, 1.5rem);
   font-weight: 500;
   color: var(--color-black);
 }
@@ -203,7 +204,8 @@ body {
 .search__btn {
   padding-inline: var(--space-12);
   background: var(--color-black);
-  font-size: 1rem;          /* 16px */
+  /* 전체 구간 유동 폰트: 375px에서 16px → 1920px에서 24px */
+  font-size: clamp(1rem, 0.879rem + 0.518vw, 1.5rem);
   font-weight: 500;
   color: var(--color-gray-400);
 }
@@ -334,12 +336,12 @@ body {
 
   .search__input {
     padding-inline: var(--space-28);
-    font-size: 1.5rem;      /* 24px */
+    /* font-size는 clamp로 자동 변화하므로 여기서 다시 지정하지 않음 */
   }
 
   .search__btn {
     padding-inline: var(--space-56);
-    font-size: 1.5rem;      /* 24px */
+    /* font-size는 clamp로 자동 변화하므로 여기서 다시 지정하지 않음 */
   }
 
   /* 섹션 */
