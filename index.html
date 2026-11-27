@@ -25,67 +25,22 @@
       </h1>
     </div>
 
-    <div class="content">
+    <!-- 수업 단계: 모바일·PC 모두 3개, 이미지 크기와 간격은 clamp로 유동 변화 -->
+    <nav class="steps" aria-label="수업 단계">
+      <a href="#" class="step">
+        <span class="step__thumb"><img src="images/step-1.png" alt=""></span>
+        <span class="step__label"><img src="images/dot-blue.svg" alt="" class="step__dot">STEP 1</span>
+      </a>
+      <a href="#" class="step">
+        <span class="step__thumb"><img src="images/step-2.png" alt=""></span>
+        <span class="step__label"><img src="images/dot-green.svg" alt="" class="step__dot">STEP 2</span>
+      </a>
+      <a href="clamp/" class="step">
+        <span class="step__thumb"><img src="images/step-3.png" alt=""></span>
+        <span class="step__label"><img src="images/dot-orange.svg" alt="" class="step__dot">Clamp와 vW</span>
+      </a>
+    </nav>
 
-      <div class="sections">
-
-        <!-- RECENT : 2개 → 3개(768px~) → 5개(1440px~) -->
-        <section class="section">
-          <div class="section__head">
-            <h2 class="section__title">Recent</h2>
-            <a href="#" class="section__more" aria-label="Recent 더보기">
-              <img src="images/arrow-up-right.svg" alt="">
-            </a>
-          </div>
-          <ul class="grid grid--recent">
-            <li class="card card--square"></li>
-            <li class="card card--square"></li>
-            <!-- 조건부 노출: 3번째는 768px 이상, 4~5번째는 1440px 이상에서 노출 -->
-            <li class="card card--square pc-only"></li>
-            <li class="card card--square lg-only"></li>
-            <li class="card card--square lg-only"></li>
-          </ul>
-        </section>
-
-        <!-- TREND : 위 2개+아래 1개 → 위 4개+아래 2개(768px~) -->
-        <section class="section">
-          <div class="section__head">
-            <h2 class="section__title">Trend</h2>
-            <a href="#" class="section__more" aria-label="Trend 더보기">
-              <img src="images/arrow-up-right.svg" alt="">
-            </a>
-          </div>
-          <div class="trend">
-            <ul class="grid grid--trend-top">
-              <li class="card card--square"></li>
-              <li class="card card--square"></li>
-              <li class="card card--square pc-only"></li>
-              <li class="card card--square pc-only"></li>
-            </ul>
-            <ul class="grid grid--trend-bottom">
-              <li class="card card--wide"></li>
-              <li class="card card--wide pc-only"></li>
-            </ul>
-          </div>
-        </section>
-
-        <!-- MAGAZIN : 1개 → 3개(768px~) -->
-        <section class="section">
-          <div class="section__head">
-            <h2 class="section__title">Magazin</h2>
-            <a href="#" class="section__more" aria-label="Magazin 더보기">
-              <img src="images/arrow-up-right.svg" alt="">
-            </a>
-          </div>
-          <ul class="grid grid--magazin">
-            <li class="card card--magazin"></li>
-            <li class="card card--magazin pc-only"></li>
-            <li class="card card--magazin pc-only"></li>
-          </ul>
-        </section>
-
-      </div>
-    </div>
   </main>
 
 </body>

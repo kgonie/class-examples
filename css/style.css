@@ -85,9 +85,9 @@ img {
        기울기 = (최대 - 최소) / (1920 - 375) × 100
        보정값 = 최소 - 기울기 × 3.75                          */
   --layout-gutter:   clamp(16px, 10.74vw - 24.29px, 182px); /* 좌우 여백 16 → 182 */
-  --layout-top:      clamp(27px, 1.88vw + 19.96px, 56px);   /* 헤더 ~ 본문 27 → 56 */
+  --layout-top:      clamp(76px, 0.26vw + 75.03px, 80px);   /* 페이지 상단 ~ 타이틀 76 → 80 */
   --layout-bottom:   clamp(60px, 1.29vw + 55.15px, 80px);   /* 페이지 하단 60 → 80 */
-  --layout-hero:     clamp(20px, 1.29vw + 15.15px, 40px);   /* 타이틀 ~ 검색 20 → 40 */
+  --layout-hero:     clamp(64px, 2.07vw + 56.23px, 96px);   /* 타이틀 ~ 수업 단계 64 → 96 */
   --layout-content:  clamp(28px, 1.81vw + 21.2px, 56px);    /* 검색 ~ 섹션 28 → 56 */
   --layout-section:  clamp(24px, 1.04vw + 20.12px, 40px);   /* 섹션 ~ 섹션 24 → 40 (RECENT·TREND·MAGAZIN 사이) */
 }
@@ -163,27 +163,84 @@ body {
      rem + vw를 섞어 쓰는 이유: vw만 쓰면 브라우저 글자 크기 설정이 반영되지 않음 */
   font-size: clamp(2rem, 1.393rem + 2.59vw, 4.5rem);
   font-weight: 700;
-  line-height: 1.5;
+  line-height: 1;
   text-transform: uppercase;
+  /* 줄 사이 간격: 375px에서 8px → 1920px에서 16px */
+  display: flex;
+  flex-direction: column;
+  gap: clamp(8px, 0.52vw + 6.06px, 16px);
 }
 
-/* 타이틀 한 줄씩: DESIGN / PREP */
+/* 타이틀 한 줄씩: RESPONSIVE / WEB DESIGN / GUIDE */
 .hero__line {
   display: block;
 }
 
-/* 두 번째 줄(PREP)은 글자 옆에 네모를 붙이기 위해 flex로 */
+/* 마지막 줄(GUIDE)은 글자 옆에 네모를 붙이기 위해 flex로 */
 .hero__line--dot {
   display: flex;
   align-items: flex-end;
-  gap: var(--space-8);
+  gap: clamp(8px, 0.78vw + 5.09px, 20px);          /* 글자 ~ 네모 8 → 20 */
 }
 
 .hero__dot {
-  width: 8px;
-  height: 8px;
-  margin-bottom: var(--space-16);
+  width: clamp(0.5rem, 0.379rem + 0.518vw, 1rem);  /* 8px → 16px */
+  height: auto;
+  aspect-ratio: 1 / 1;
+  margin-bottom: clamp(4px, 0.26vw + 3.03px, 8px); /* 4px → 8px */
   background: var(--color-black);
+}
+
+/* 수업 단계 (STEP 1 · STEP 2 · Clamp와 vW)
+   375px:  칸 114.33px × 3, 칸 사이 0   → 343px 폭을 3등분, 이미지는 칸 가운데
+   1920px: 칸 190px × 3,    칸 사이 96px → 왼쪽부터 차례로 */
+.steps {
+  display: grid;
+  /* minmax(0, …): 375px보다 좁은 화면에서는 칸이 줄어들어 가로 스크롤이 생기지 않음 */
+  grid-template-columns: repeat(3, minmax(0, clamp(114.33px, 4.898vw + 95.96px, 190px)));
+  column-gap: clamp(0px, 6.214vw - 23.3px, 96px);
+}
+
+.step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(8px, 0.26vw + 7.03px, 12px);          /* 이미지 ~ 글자 8 → 12 */
+}
+
+/* 이미지: 90 × 81px → 190 × 171px, 시안처럼 원본 이미지의 일부만 잘라서 보여줌 */
+.step__thumb {
+  position: relative;
+  width: min(100%, clamp(5.625rem, 4.108rem + 6.472vw, 11.875rem));
+  aspect-ratio: 190 / 171;
+  overflow: hidden;
+}
+
+.step__thumb img {
+  position: absolute;
+  top: 0;
+  left: -44.46%;
+  width: 188.93%;
+  height: 210.05%;
+  max-width: none;
+}
+
+.step__label {
+  display: flex;
+  align-items: center;
+  gap: clamp(4px, 0.52vw + 2.06px, 12px);          /* 동그라미 ~ 글자 4 → 12 */
+  /* 전체 구간 유동 폰트: 375px에서 14px → 1920px에서 18px */
+  font-size: clamp(0.875rem, 0.814rem + 0.259vw, 1.125rem);
+  font-weight: 500;
+  line-height: 1.5;
+  text-transform: capitalize;
+  white-space: nowrap;
+}
+
+.step__dot {
+  width: clamp(0.5625rem, 0.487rem + 0.324vw, 0.875rem); /* 9px → 14px */
+  height: auto;
+  aspect-ratio: 1 / 1;
 }
 
 .content {
@@ -329,21 +386,7 @@ body {
     height: 32px;
   }
 
-  /* 타이틀 */
-  .hero__line--dot {
-    gap: var(--space-20);
-  }
-
-  .hero__title {
-    /* font-size는 clamp로 자동 변화하므로 여기서 다시 지정하지 않음 */
-    line-height: 1.4;
-  }
-
-  .hero__dot {
-    width: 16px;
-    height: 16px;
-    margin-bottom: var(--space-24);
-  }
+  /* 타이틀·수업 단계: 모든 크기와 간격이 clamp로 자동 변화하므로 여기서 다시 지정하지 않음 */
 
   /* 검색: 전체 폭이 아닌 최대 1240px */
   .search {
