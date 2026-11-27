@@ -3,74 +3,76 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>폰트 스타일 가이드 - Design Prep</title>
+  <title>폰트 스타일 가이드 - Responsive Web Design Guide</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
   <!-- 메인페이지 CSS를 그대로 불러와요: 아래 견본은 메인페이지와 같은 클래스를 써서, 메인 폰트를 바꾸면 여기도 같이 바뀌어요 -->
   <link rel="stylesheet" href="../css/style.css">
   <style>
     /* ===== 이 페이지 전용 스타일 (sg- 로 시작) ===== */
+    :root {
+      --sg-green: #cfdccb;   /* 표 머리, 배지 */
+      --sg-gray-100: #ececec; /* 코드 배경, 구분선 */
+      --sg-gray-500: #888;   /* 보조 글자 */
+    }
+
     .sg-top {
       position: sticky; top: 0; z-index: 10;
       background: var(--color-white); border-bottom: 1px solid var(--color-black);
     }
     .sg-top__inner {
       display: flex; align-items: center; justify-content: space-between; gap: 12px;
-      padding-block: var(--space-8);
-      /* 메인페이지 헤더와 같은 높이: 8 + 로고 clamp(32px~52px) + 8 */
-      min-height: clamp(3rem, 2.697rem + 1.294vw, 4.25rem);
-      font-size: 0.875rem;
+      padding-block: 10px; font-size: 0.875rem;
     }
     .sg-badge {
       display: inline-flex; gap: 6px; align-items: center;
-      padding: 3px 10px; background: var(--color-green-100); border: 1px solid var(--color-black);
+      padding: 3px 10px; background: var(--sg-green); border: 1px solid var(--color-black);
       font-weight: 600; white-space: nowrap;
     }
 
-    .sg-intro { padding-block: var(--layout-top) 0; }
-    .sg-eyebrow { font-size: 0.875rem; font-weight: 600; letter-spacing: 0.08em; color: var(--color-gray-500); }
+    .sg-intro { padding-block: clamp(40px, 2.59vw + 30.29px, 80px) 0; }
+    .sg-eyebrow { font-size: 0.875rem; font-weight: 600; letter-spacing: 0.08em; color: var(--sg-gray-500); }
     .sg-h1 { font-size: clamp(1.75rem, 1.386rem + 1.553vw, 3.25rem); font-weight: 700; line-height: 1.3; margin: 8px 0 12px; }
     .sg-desc { max-width: 720px; line-height: 1.7; color: #444; }
-    .sg-desc code, .sg-table code, .sg-spec code { background: var(--color-gray-100); padding: 1px 6px; font-size: 0.875em; }
+    .sg-desc code, .sg-spec code { background: var(--sg-gray-100); padding: 1px 6px; font-size: 0.875em; }
 
-    .sg-main { display: flex; flex-direction: column; gap: var(--layout-content); padding-block: var(--layout-content) var(--layout-bottom); }
+    .sg-main { display: flex; flex-direction: column; gap: clamp(32px, 1.55vw + 26.17px, 56px); padding-block: clamp(32px, 1.55vw + 26.17px, 56px) var(--layout-bottom); }
     .sg-h2 { font-size: 1.125rem; font-weight: 700; margin-bottom: 12px; }
 
     .sg-table-wrap { overflow-x: auto; }
     .sg-table { width: 100%; min-width: 760px; border-collapse: collapse; font-size: 0.9375rem; line-height: 1.5; }
     .sg-table th, .sg-table td { border: 1px solid var(--color-black); padding: 8px 12px; text-align: left; vertical-align: middle; }
-    .sg-table th { background: var(--color-green-100); font-weight: 600; white-space: nowrap; }
+    .sg-table th { background: var(--sg-green); font-weight: 600; white-space: nowrap; }
     .sg-table td b { font-weight: 700; }
     .sg-now { font-weight: 700; white-space: nowrap; }
 
     /* 스타일 카드 */
-    .sg-list { display: flex; flex-direction: column; gap: var(--layout-section); }
+    .sg-list { display: flex; flex-direction: column; gap: clamp(24px, 1.04vw + 20.12px, 40px); }
     .sg-card { border: 1px solid var(--color-black); }
     .sg-card__head {
       display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 8px;
-      padding: 12px 16px; border-bottom: 1px solid var(--color-black); background: var(--color-green-100);
+      padding: 12px 16px; border-bottom: 1px solid var(--color-black); background: var(--sg-green);
     }
     .sg-card__name { font-size: 1rem; font-weight: 700; }
     .sg-card__name small { font-size: 0.8125rem; font-weight: 500; color: #555; margin-left: 6px; }
     .sg-card__live { font-size: 0.875rem; }
     .sg-card__live b { font-size: 1rem; }
-    .sg-specimen { padding: clamp(16px, 1.04vw + 12.12px, 32px) 16px; overflow-x: auto; }
-    .sg-specimen--dark { background: var(--color-black); }
-    .sg-specimen .search { max-width: 640px; }
+    .sg-specimen { display: flex; flex-wrap: wrap; gap: 16px 40px; padding: clamp(16px, 1.04vw + 12.12px, 32px) 16px; overflow-x: auto; }
     .sg-spec {
       display: grid; grid-template-columns: repeat(2, 1fr);
       border-top: 1px solid var(--color-black); font-size: 0.875rem; line-height: 1.5;
     }
-    .sg-spec div { padding: 10px 16px; border-bottom: 1px solid var(--color-gray-100); }
-    .sg-spec dt { font-size: 0.75rem; font-weight: 600; color: var(--color-gray-500); }
+    .sg-spec div { padding: 10px 16px; border-bottom: 1px solid var(--sg-gray-100); }
+    .sg-spec dt { font-size: 0.75rem; font-weight: 600; color: var(--sg-gray-500); }
     .sg-spec dd { font-weight: 600; overflow-wrap: anywhere; }
     .sg-spec .sg-wide { grid-column: 1 / -1; }
 
-    .sg-colors { display: flex; flex-wrap: wrap; gap: 12px; }
+    .sg-colors { display: flex; flex-wrap: wrap; gap: 12px 24px; }
     .sg-color { display: flex; align-items: center; gap: 10px; font-size: 0.875rem; line-height: 1.4; }
     .sg-color i { width: 36px; height: 36px; border: 1px solid var(--color-black); flex-shrink: 0; }
+    .sg-color i.sg-round { border-radius: 50%; border: 0; }
     .sg-color b { display: block; }
 
-    .sg-footer { border-top: 1px solid var(--color-black); padding-block: 24px; font-size: 0.875rem; color: var(--color-gray-500); }
+    .sg-footer { border-top: 1px solid var(--color-black); padding-block: 24px; font-size: 0.875rem; color: var(--sg-gray-500); }
 
     @media (min-width: 768px) {
       .sg-spec { grid-template-columns: repeat(4, 1fr); }
@@ -92,7 +94,7 @@
       <p class="sg-eyebrow">TYPOGRAPHY · STYLE GUIDE</p>
       <h1 class="sg-h1">폰트 스타일 가이드</h1>
       <p class="sg-desc">
-        메인페이지(Design Prep)에 쓰인 글자 스타일 4가지를 모았어요.
+        메인페이지(Responsive Web Design Guide)에 쓰인 글자 스타일 2가지를 모았어요.
         모든 글자 크기는 <code>rem + vw</code>를 섞은 <code>clamp()</code>로 만들어서,
         화면 폭 <b>375px → 1920px</b> 사이에서 비율대로 커지고 브라우저 글자 크기 설정도 따라가요.
         창 크기를 바꿔 보면 "지금" 값이 바로 바뀌어요.
@@ -121,43 +123,23 @@
             <tbody>
               <tr>
                 <td><b>Display</b></td>
-                <td>히어로 타이틀 (h1)</td>
+                <td>메인 타이틀 (h1)</td>
                 <td>32px</td>
                 <td>72px</td>
                 <td class="sg-now" data-now="spec-display">-</td>
                 <td>700 Bold</td>
-                <td>1.5 → 1.4 (768px~)</td>
-                <td>대문자</td>
+                <td>1</td>
+                <td>모두 대문자</td>
               </tr>
               <tr>
-                <td><b>Title</b></td>
-                <td>섹션 타이틀 (h2)</td>
-                <td>20px</td>
-                <td>30px</td>
-                <td class="sg-now" data-now="spec-title">-</td>
-                <td>600 SemiBold</td>
-                <td>1.5</td>
-                <td>대문자</td>
-              </tr>
-              <tr>
-                <td><b>Input</b></td>
-                <td>검색 입력창 · placeholder</td>
-                <td>16px</td>
-                <td>24px</td>
-                <td class="sg-now" data-now="spec-input">-</td>
+                <td><b>Label</b></td>
+                <td>수업 단계 이름 (STEP 1 · STEP 2 · Clamp와 vW)</td>
+                <td>14px</td>
+                <td>18px</td>
+                <td class="sg-now" data-now="spec-label">-</td>
                 <td>500 Medium</td>
                 <td>1.5</td>
-                <td>그대로</td>
-              </tr>
-              <tr>
-                <td><b>Button</b></td>
-                <td>검색 버튼</td>
-                <td>16px</td>
-                <td>24px</td>
-                <td class="sg-now" data-now="spec-button">-</td>
-                <td>500 Medium</td>
-                <td>1.5</td>
-                <td>그대로</td>
+                <td>단어 첫 글자만 대문자</td>
               </tr>
             </tbody>
           </table>
@@ -172,95 +154,60 @@
           <!-- Display -->
           <article class="sg-card">
             <div class="sg-card__head">
-              <p class="sg-card__name">Display <small>히어로 타이틀 · .hero__title</small></p>
+              <p class="sg-card__name">Display <small>메인 타이틀 · .hero__title</small></p>
               <p class="sg-card__live">지금 <b data-now="spec-display">-</b></p>
             </div>
             <div class="sg-specimen">
-              <p class="hero__title" id="spec-display">Design Prep</p>
+              <p class="hero__title" id="spec-display">
+                <span class="hero__line">Responsive</span>
+                <span class="hero__line">Web Design</span>
+                <span class="hero__line hero__line--dot">Guide<span class="hero__dot" aria-hidden="true"></span></span>
+              </p>
             </div>
             <dl class="sg-spec">
               <div class="sg-wide"><dt>font-size</dt><dd><code>clamp(2rem, 1.393rem + 2.59vw, 4.5rem)</code></dd></div>
               <div><dt>크기</dt><dd>32px → 72px</dd></div>
               <div><dt>font-weight</dt><dd>700 (Bold)</dd></div>
-              <div><dt>line-height</dt><dd>1.5 · 768px 이상 1.4</dd></div>
+              <div><dt>line-height</dt><dd>1</dd></div>
+              <div><dt>줄 사이 간격</dt><dd>8px → 16px</dd></div>
               <div><dt>text-transform</dt><dd>uppercase</dd></div>
               <div><dt>color</dt><dd>#222 (--color-black)</dd></div>
-              <div><dt>font-family</dt><dd>Pretendard</dd></div>
             </dl>
           </article>
 
-          <!-- Title -->
+          <!-- Label -->
           <article class="sg-card">
             <div class="sg-card__head">
-              <p class="sg-card__name">Title <small>섹션 타이틀 · .section__title</small></p>
-              <p class="sg-card__live">지금 <b data-now="spec-title">-</b></p>
+              <p class="sg-card__name">Label <small>수업 단계 이름 · .step__label</small></p>
+              <p class="sg-card__live">지금 <b data-now="spec-label">-</b></p>
             </div>
             <div class="sg-specimen">
-              <p class="section__title" id="spec-title">Recent · Trend · Magazin</p>
+              <span class="step__label" id="spec-label"><img src="../images/dot-blue.svg" alt="" class="step__dot">STEP 1</span>
+              <span class="step__label"><img src="../images/dot-green.svg" alt="" class="step__dot">STEP 2</span>
+              <span class="step__label"><img src="../images/dot-orange.svg" alt="" class="step__dot">Clamp와 vW</span>
             </div>
             <dl class="sg-spec">
-              <div class="sg-wide"><dt>font-size</dt><dd><code>clamp(1.25rem, 1.098rem + 0.647vw, 1.875rem)</code></dd></div>
-              <div><dt>크기</dt><dd>20px → 30px</dd></div>
-              <div><dt>font-weight</dt><dd>600 (SemiBold)</dd></div>
+              <div class="sg-wide"><dt>font-size</dt><dd><code>clamp(0.875rem, 0.814rem + 0.259vw, 1.125rem)</code></dd></div>
+              <div><dt>크기</dt><dd>14px → 18px</dd></div>
+              <div><dt>font-weight</dt><dd>500 (Medium)</dd></div>
               <div><dt>line-height</dt><dd>1.5</dd></div>
-              <div><dt>text-transform</dt><dd>uppercase</dd></div>
+              <div><dt>동그라미 크기 · 간격</dt><dd>9px → 14px · 4px → 12px</dd></div>
+              <div><dt>text-transform</dt><dd>capitalize</dd></div>
               <div><dt>color</dt><dd>#222 (--color-black)</dd></div>
-              <div><dt>font-family</dt><dd>Pretendard</dd></div>
-            </dl>
-          </article>
-
-          <!-- Input -->
-          <article class="sg-card">
-            <div class="sg-card__head">
-              <p class="sg-card__name">Input <small>검색 입력창 · .search__input</small></p>
-              <p class="sg-card__live">지금 <b data-now="spec-input">-</b></p>
-            </div>
-            <div class="sg-specimen">
-              <div class="search">
-                <input type="text" class="search__input" id="spec-input" placeholder="Nature" aria-label="입력 글자 견본">
-              </div>
-            </div>
-            <dl class="sg-spec">
-              <div class="sg-wide"><dt>font-size</dt><dd><code>clamp(1rem, 0.879rem + 0.518vw, 1.5rem)</code></dd></div>
-              <div><dt>크기</dt><dd>16px → 24px</dd></div>
-              <div><dt>font-weight</dt><dd>500 (Medium)</dd></div>
-              <div><dt>line-height</dt><dd>1.5</dd></div>
-              <div><dt>text-transform</dt><dd>none</dd></div>
-              <div><dt>color</dt><dd>입력 글자 #222 · placeholder #999</dd></div>
-              <div><dt>font-family</dt><dd>Pretendard</dd></div>
-            </dl>
-          </article>
-
-          <!-- Button -->
-          <article class="sg-card">
-            <div class="sg-card__head">
-              <p class="sg-card__name">Button <small>검색 버튼 · .search__btn</small></p>
-              <p class="sg-card__live">지금 <b data-now="spec-button">-</b></p>
-            </div>
-            <div class="sg-specimen">
-              <button type="button" class="search__btn" id="spec-button">Search</button>
-            </div>
-            <dl class="sg-spec">
-              <div class="sg-wide"><dt>font-size</dt><dd><code>clamp(1rem, 0.879rem + 0.518vw, 1.5rem)</code></dd></div>
-              <div><dt>크기</dt><dd>16px → 24px</dd></div>
-              <div><dt>font-weight</dt><dd>500 (Medium)</dd></div>
-              <div><dt>line-height</dt><dd>1.5</dd></div>
-              <div><dt>text-transform</dt><dd>none</dd></div>
-              <div><dt>color</dt><dd>#aaa 글자 · #222 배경</dd></div>
-              <div><dt>font-family</dt><dd>Pretendard</dd></div>
             </dl>
           </article>
 
         </div>
       </section>
 
-      <!-- 글자 색 -->
+      <!-- 색 -->
       <section>
-        <h2 class="sg-h2">글자 색</h2>
+        <h2 class="sg-h2">색</h2>
         <div class="sg-colors">
-          <div class="sg-color"><i style="background: var(--color-black)"></i><span><b>#222</b>--color-black · 타이틀, 입력 글자</span></div>
-          <div class="sg-color"><i style="background: var(--color-gray-500)"></i><span><b>#999</b>--color-gray-500 · placeholder</span></div>
-          <div class="sg-color"><i style="background: var(--color-gray-400)"></i><span><b>#aaa</b>--color-gray-400 · 검색 버튼 글자</span></div>
+          <div class="sg-color"><i style="background: var(--color-black)"></i><span><b>#222</b>--color-black · 모든 글자, 타이틀 네모</span></div>
+          <div class="sg-color"><i class="sg-round" style="background: #377efc"></i><span><b>#377EFC</b>STEP 1 동그라미</span></div>
+          <div class="sg-color"><i class="sg-round" style="background: #37bd97"></i><span><b>#37BD97</b>STEP 2 동그라미</span></div>
+          <div class="sg-color"><i class="sg-round" style="background: #ffab61"></i><span><b>#FFAB61</b>Clamp와 vW 동그라미</span></div>
         </div>
       </section>
 
