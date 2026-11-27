@@ -156,7 +156,6 @@ body {
 .hero {
   display: flex;
   align-items: flex-end;
-  gap: var(--space-8);
 }
 
 .hero__title {
@@ -166,6 +165,18 @@ body {
   font-weight: 700;
   line-height: 1.5;
   text-transform: uppercase;
+}
+
+/* 타이틀 한 줄씩: DESIGN / PREP */
+.hero__line {
+  display: block;
+}
+
+/* 두 번째 줄(PREP)은 글자 옆에 네모를 붙이기 위해 flex로 */
+.hero__line--dot {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--space-8);
 }
 
 .hero__dot {
@@ -319,7 +330,7 @@ body {
   }
 
   /* 타이틀 */
-  .hero {
+  .hero__line--dot {
     gap: var(--space-20);
   }
 
